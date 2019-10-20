@@ -29,7 +29,6 @@ RUN chown -R 1001:0 $HOME && \
     chmod -R g+rw $HOME && \
     useradd -u 1001 jenkins && \
     usermod -aG sudo jenkins && \
-#    usermod -aG docker jenkins && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
@@ -38,8 +37,6 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
        $(lsb_release -cs) \
        stable" && \
     apt-get install docker-ce docker-ce-cli containerd.io && \
-    rm /usr/sbin/iptables && \
-    ln -s /usr/sbin/iptables-compat /usr/sbin/iptables
 
 RUN apt install -y iproute2 vim npm maven
 ENV DOCKER_HOST_IP=172.17.0.1
