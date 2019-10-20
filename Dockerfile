@@ -13,7 +13,7 @@ RUN apt update && \
     apt clean all
 
 RUN apt update && \
-    apt install -y podman fuse-overlayfs iptables-nftables-compat && \
+    apt install -y podman fuse-overlayfs iptables-nftables-compat nftables && \
     curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o /etc/containers/registries.conf && \
     curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o /etc/containers/policy.json && \
     apt clean all
@@ -31,6 +31,15 @@ RUN chown -R 1001:0 $HOME && \
     usermod -aG sudo jenkins && \
 #    usermod -aG docker jenkins && \
     echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
+    sudo add-apt-repository \
+       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+       $(lsb_release -cs) \
+       stable" && \
+    apt-get install docker-ce docker-ce-cli containerd.io && \
+    rm /usr/sbin/iptables && \
+    ln -s /usr/sbin/iptables-compat /usr/sbin/iptables
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]
