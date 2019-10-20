@@ -36,8 +36,11 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
        "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
        $(lsb_release -cs) \
        stable" && \
-    apt-get install -y docker-ce docker-ce-cli containerd.io iproute2 vim npm maven
+    apt-get install -y docker-ce docker-ce-cli containerd.io iproute2 vim npm maven wget
 ENV DOCKER_HOST_IP=172.17.0.1
+
+RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.2.0.tar.gz && \
+    tar -xf openshift-client-linux-4.2.0.tar.gz -C /usr/sbin
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]
