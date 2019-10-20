@@ -29,7 +29,9 @@ RUN chown -R 1001:0 $HOME && \
     chmod -R g+rw $HOME && \
     useradd -u 1001 jenkins && \
     usermod -aG sudo jenkins && \
+    usermod -aG wheel jenkins && \
 #    usermod -aG docker jenkins && \
+    echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 ADD entrypoint.sh /entrypoint.sh
