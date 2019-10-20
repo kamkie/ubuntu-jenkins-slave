@@ -6,7 +6,7 @@ if [ $# -eq 0 ]; then
   mkdir -p "${JENKINS_AGENT_WORKDIR}"
   cd "${JENKINS_AGENT_WORKDIR}"
   curl "${JENKINS_URL}jnlpJars/agent.jar" -o agent.jar
-  java -jar agent.jar -jnlpUrl "${JENKINS_URL}computer/slave/slave-agent.jnlp" -secret "${JENKINS_SECRET}" -workDir "${JENKINS_HOME}" -tunnel "${JENKINS_TUNNEL}"
+  java -jar agent.jar -jnlpUrl "${JENKINS_URL}computer/slave/slave-agent.jnlp" -secret "${JENKINS_SECRET}" -workDir "${JENKINS_HOME}"
 fi
 
 echo "executing passed command"
