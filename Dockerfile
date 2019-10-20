@@ -1,12 +1,27 @@
-FROM ubuntu
+FROM ubuntu:19.04
 
 RUN apt update && \
-    apt -y  install software-properties-common && \
+    apt upgrade -y && \
+    apt install -y software-properties-common sudo curl dumb-init && \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
+    apt-add-repository 'deb http://repos.azulsystems.com/ubuntu stable main' && \
     add-apt-repository -y ppa:projectatomic/ppa && \
-    apt update && \
-    apt -y install podman && \
-    sudo curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o /etc/containers/registries.conf && \
-    sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o /etc/containers/policy.json
+    apt clean all
+
+RUN apt update && \
+    apt install -y zulu-11 && \
+    apt clean all
+
+RUN apt update && \
+    apt install -y podman fuse-overlayfs iptables && \
+    curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o /etc/containers/registries.conf && \
+    curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o /etc/containers/policy.json && \
+    apt clean all
+
+RUN rm -rf /var/lib/shared/overlay-images && \
+    rm -rf /var/lib/shared/overlay-layers && \
+    rm -rf /var/lib/shared/overlay-images/images.lock /var/lib/shared/overlay-layers/layers.lock && \
+    rm -f /etc/containers/storage.conf
 
 ADD entrypoint.sh /entrypoint.sh
-CMD /entrypoint.sh
+ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]
