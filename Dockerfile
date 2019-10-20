@@ -41,5 +41,8 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     rm /usr/sbin/iptables && \
     ln -s /usr/sbin/iptables-compat /usr/sbin/iptables
 
+RUN apt install -y iproute2 vim npm maven
+ENV DOCKER_HOST_IP=172.17.0.1
+
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]

@@ -3,6 +3,9 @@ if [ $# -eq 0 ]; then
   podman info > /tmp/podman.log
 
   tail -f /tmp/podman.log
+  sudo -b dockerd --iptables=false -H unix:///var/run/docker.sock -H tcp://127.0.0.1:2375
+
+  java -jar agent.jar -jnlpUrl "${JENKINS_URL}computer/slave/slave-agent.jnlp" -secret "${JENKINS_SECRET}" -workDir "${JENKINS_AGENT_WORKDIR}" -tunnel "${JENKINS_TUNNEL}"
 fi
 
 echo "executing passed command"
