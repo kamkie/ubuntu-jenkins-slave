@@ -13,7 +13,7 @@ RUN apt update && \
     apt clean all
 
 RUN apt update && \
-    apt install -y podman fuse-overlayfs iptables && \
+    apt install -y podman fuse-overlayfs iptables-nftables-compat && \
     curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o /etc/containers/registries.conf && \
     curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o /etc/containers/policy.json && \
     apt clean all
