@@ -23,5 +23,14 @@ RUN rm -rf /var/lib/shared/overlay-images && \
     rm -rf /var/lib/shared/overlay-images/images.lock /var/lib/shared/overlay-layers/layers.lock && \
     rm -f /etc/containers/storage.conf
 
+RUN mkdir /home/jenkins
+ENV HOME /home/jenkins
+RUN chown -R 1001:0 $HOME && \
+    chmod -R g+rw $HOME && \
+    useradd -u 1001 jenkins && \
+    usermod -aG sudo jenkins && \
+#    usermod -aG docker jenkins && \
+    echo "%wheel ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]
