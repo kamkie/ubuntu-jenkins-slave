@@ -36,9 +36,7 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
        "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
        $(lsb_release -cs) \
        stable" && \
-    apt-get install docker-ce docker-ce-cli containerd.io && \
-
-RUN apt install -y iproute2 vim npm maven
+    apt-get install -y docker-ce docker-ce-cli containerd.io iproute2 vim npm maven
 ENV DOCKER_HOST_IP=172.17.0.1
 
 ADD entrypoint.sh /entrypoint.sh
