@@ -42,5 +42,8 @@ ENV DOCKER_HOST_IP=172.17.0.1
 RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.2.0.tar.gz && \
     tar -xf openshift-client-linux-4.2.0.tar.gz -C /usr/sbin
 
+ADD daemon.json /etc/docker/daemon.json
+ADD nft-fix /nft-fix
+
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]
