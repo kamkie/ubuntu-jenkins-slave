@@ -44,7 +44,7 @@ RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/opensh
 
 ADD nft-fix /nft-fix
 RUN rm /usr/sbin/iptables && \
-    ln -s /usr/sbin/iptables-compact /usr/sbin/iptables
+    ln -s /usr/sbin/iptables-compat /usr/sbin/iptables
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]

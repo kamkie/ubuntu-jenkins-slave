@@ -1,4 +1,4 @@
-sudo iptables-compact -nvL -t nat
+sudo iptables-compat -nvL -t nat
 sudo ./nft-fix
 
 if [ $# -eq 0 ]; then
