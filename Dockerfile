@@ -44,6 +44,8 @@ RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/opensh
 
 ADD daemon.json /etc/docker/daemon.json
 ADD nft-fix /nft-fix
+RUN rm /usr/sbin/iptables && \
+    ln -s /usr/sbin/iptables-compact /usr/sbin/iptables
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]
