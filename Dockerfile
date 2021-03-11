@@ -11,6 +11,7 @@ RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/opensh
 
 RUN mkdir /home/jenkins
 ENV HOME /home/jenkins
+WORKDIR /home/jenkins
 RUN chown -R 1001:0 $HOME && \
     chmod -R g+rw $HOME && \
     useradd -u 1001 jenkins && \
@@ -51,10 +52,6 @@ RUN rm -rf /var/lib/shared/overlay-images && \
     rm -rf /var/lib/shared/overlay-layers && \
     rm -rf /var/lib/shared/overlay-images/images.lock /var/lib/shared/overlay-layers/layers.lock && \
     rm -f /etc/containers/storage.conf
-
-ENV DOCKER_HOST_IP=172.17.0.1
-
-ADD nft-fix /nft-fix
 
 RUN apt update && \
     apt upgrade -y
