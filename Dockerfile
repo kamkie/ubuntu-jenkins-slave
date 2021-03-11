@@ -55,8 +55,6 @@ RUN rm -rf /var/lib/shared/overlay-images && \
 ENV DOCKER_HOST_IP=172.17.0.1
 
 ADD nft-fix /nft-fix
-#RUN rm /usr/sbin/iptables && \
-#    ln -s /usr/sbin/iptables-compat /usr/sbin/iptables
 
 RUN apt update && \
     apt upgrade -y
