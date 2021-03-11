@@ -30,7 +30,7 @@ spec:
           namespace: jenkins2
           name: 'ubuntu-jenkins-slave:latest'
         lastTriggeredImage: >-
-          image-registry.openshift-image-registry.svc:5000/jenkins2/ubuntu-jenkins-slave@sha256:fee8c0eb111580ede566fd431842484140d44ff21093d0f87552ef3cf6734922
+          image-registry.openshift-image-registry.svc:5000/jenkins2/ubuntu-jenkins-slave@sha256:91f1b4faeb1d2c045bc052c015c4384c33be50605bfe6a85bc90d69534a20f7b
     - type: ConfigChange
   replicas: 1
   revisionHistoryLimit: 10
@@ -47,6 +47,10 @@ spec:
       annotations:
         openshift.io/generated-by: OpenShiftWebConsole
     spec:
+      volumes:
+        - name: jenkins-worker-cache
+          persistentVolumeClaim:
+            claimName: jenkins-worker-cache
       containers:
         - resources: {}
           terminationMessagePath: /dev/termination-log
@@ -69,9 +73,12 @@ spec:
             - containerPort: 8080
               protocol: TCP
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: jenkins-worker-cache
+              mountPath: /home/jenkins
           terminationMessagePolicy: File
           image: >-
-            image-registry.openshift-image-registry.svc:5000/jenkins2/ubuntu-jenkins-slave@sha256:fee8c0eb111580ede566fd431842484140d44ff21093d0f87552ef3cf6734922
+            image-registry.openshift-image-registry.svc:5000/jenkins2/ubuntu-jenkins-slave@sha256:91f1b4faeb1d2c045bc052c015c4384c33be50605bfe6a85bc90d69534a20f7b
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst
