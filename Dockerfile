@@ -1,13 +1,13 @@
 FROM ubuntu:20.10
 
-RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz && \
-    tar -xf openshift-client-linux.tar.gz -C /usr/sbin
-
 RUN apt update && \
     apt upgrade -y && \
     apt install -y software-properties-common sudo curl wget vim dumb-init iproute2 zip unzip screenfetch && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
     apt clean all
+
+RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz && \
+    tar -xf openshift-client-linux.tar.gz -C /usr/sbin
 
 RUN mkdir /home/jenkins
 ENV HOME /home/jenkins
