@@ -1,5 +1,5 @@
 if [ $# -eq 0 ]; then
-  echo "No arguments supplied - tail -f /var/log/podman.log"
+  echo "No arguments supplied"
 
   sudo -b dockerd --iptables=false -H unix:///var/run/docker.sock -H tcp://127.0.0.1:2375
 
