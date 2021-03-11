@@ -1,0 +1,80 @@
+kind: DeploymentConfig
+apiVersion: apps.openshift.io/v1
+metadata:
+  name: ubuntu-jenkins-slave
+  namespace: jenkins2
+  labels:
+    app: ubuntu-jenkins-slave
+    app.kubernetes.io/component: ubuntu-jenkins-slave
+    app.kubernetes.io/instance: ubuntu-jenkins-slave
+    app.kubernetes.io/name: ubuntu-jenkins-slave
+    app.kubernetes.io/part-of: ubuntu-jenkins-slave-app
+    app.openshift.io/runtime: ubuntu-jenkins-slave
+    app.openshift.io/runtime-namespace: jenkins2
+    app.openshift.io/runtime-version: latest
+spec:
+  strategy:
+    type: Recreate
+    recreateParams:
+      timeoutSeconds: 600
+    resources: {}
+    activeDeadlineSeconds: 21600
+  triggers:
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+          - ubuntu-jenkins-slave
+        from:
+          kind: ImageStreamTag
+          namespace: jenkins2
+          name: 'ubuntu-jenkins-slave:latest'
+        lastTriggeredImage: >-
+          image-registry.openshift-image-registry.svc:5000/jenkins2/ubuntu-jenkins-slave@sha256:fee8c0eb111580ede566fd431842484140d44ff21093d0f87552ef3cf6734922
+    - type: ConfigChange
+  replicas: 1
+  revisionHistoryLimit: 10
+  test: false
+  selector:
+    app: ubuntu-jenkins-slave
+    deploymentconfig: ubuntu-jenkins-slave
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ubuntu-jenkins-slave
+        deploymentconfig: ubuntu-jenkins-slave
+      annotations:
+        openshift.io/generated-by: OpenShiftWebConsole
+    spec:
+      containers:
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: ubuntu-jenkins-slave
+          env:
+            - name: JENKINS_URL
+              value: 'https://jenkins-jenkins2.apps.openshift.devopssolutions.net/'
+            - name: JENKINS_HOME
+              value: /home/jenkins
+            - name: JENKINS_SECRET
+              value: f39ca1694d0b85891b5d04777e3cafe249c57faa46b7c14a44deff2f819271a4
+            - name: JENKINS_AGENT_NAME
+              value: maven-docker
+            - name: JENKINS_TUNNEL
+              value: '172.30.24.27:50000'
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: File
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/jenkins2/ubuntu-jenkins-slave@sha256:fee8c0eb111580ede566fd431842484140d44ff21093d0f87552ef3cf6734922
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext:
+        runAsUser: 0
+      schedulerName: default-scheduler
