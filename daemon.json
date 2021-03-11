@@ -1,0 +1,5 @@
+{
+  "insecure-registries": [
+    "image-registry.openshift-image-registry.svc:5000"
+  ]
+}

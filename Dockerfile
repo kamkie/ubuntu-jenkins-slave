@@ -59,4 +59,5 @@ RUN apt update && \
 RUN docker --version && podman --version
 
 ADD entrypoint.sh /entrypoint.sh
+ADD daemon.json /etc/docker/daemon.json
 ENTRYPOINT ["/usr/bin/dumb-init", "--", "/entrypoint.sh"]
