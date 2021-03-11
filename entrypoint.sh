@@ -1,5 +1,5 @@
-sudo iptables-compat -nvL -t nat
-sudo ./nft-fix
+#sudo iptables-compat -nvL -t nat
+#sudo ./nft-fix
 
 if [ $# -eq 0 ]; then
   echo "No arguments supplied - tail -f /var/log/podman.log"
