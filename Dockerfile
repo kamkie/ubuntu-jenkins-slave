@@ -2,25 +2,14 @@ FROM ubuntu:22.04
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y software-properties-common sudo curl wget vim dumb-init iproute2 zip unzip screenfetch fuse-overlayfs nftables && \
+    apt-get install -y software-properties-common sudo curl wget vim dumb-init iproute2 zip unzip screenfetch fuse-overlayfs nftables gnupg ca-certificates && \
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
     apt-get clean all
 
-RUN mkdir /home/jenkins
-ENV HOME /home/jenkins
-WORKDIR /home/jenkins
-RUN chown -R 1001:0 $HOME && \
-    chmod -R g+rw $HOME && \
-    useradd -u 1001 jenkins && \
-    usermod -aG sudo jenkins && \
-    echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-    
-RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz && \
-    tar -xf openshift-client-linux.tar.gz -C /usr/sbin
-
-RUN apt-add-repository 'deb http://repos.azulsystems.com/ubuntu stable main' && \
+RUN  sh -c 'curl -s https://repos.azul.com/azul-repo.key | sudo gpg --dearmor -o /usr/share/keyrings/azul.gpg' && \
+    sh -c 'echo "deb [signed-by=/usr/share/keyrings/azul.gpg] https://repos.azul.com/zulu/deb stable main" | sudo tee /etc/apt/sources.list.d/zulu.list' && \
     apt-get update && \
-    apt-get install -y zulu-17 && \
+    apt-get install -y zulu17-jdk && \
     apt-get clean all
 
 RUN curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh && \
@@ -52,6 +41,18 @@ RUN apt-get update && \
     apt-get upgrade -y
 
 RUN docker --version && podman --version
+
+RUN wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz && \
+    tar -xf openshift-client-linux.tar.gz -C /usr/sbin
+
+RUN mkdir /home/jenkins
+ENV HOME /home/jenkins
+WORKDIR /home/jenkins
+RUN chown -R 1001:0 $HOME && \
+    chmod -R g+rw $HOME && \
+    useradd -u 1001 jenkins && \
+    usermod -aG sudo jenkins && \
+    echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 ADD entrypoint.sh /entrypoint.sh
 ADD daemon.json /etc/docker/daemon.json
