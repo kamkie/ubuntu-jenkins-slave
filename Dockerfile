@@ -3,7 +3,6 @@ FROM ubuntu:22.04
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y software-properties-common sudo curl wget vim dumb-init iproute2 zip unzip screenfetch fuse-overlayfs nftables gnupg ca-certificates && \
-    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 0xB1998361219BD9C9 && \
     apt-get clean all
 
 RUN  sh -c 'curl -s https://repos.azul.com/azul-repo.key | sudo gpg --dearmor -o /usr/share/keyrings/azul.gpg' && \
@@ -12,8 +11,8 @@ RUN  sh -c 'curl -s https://repos.azul.com/azul-repo.key | sudo gpg --dearmor -o
     apt-get install -y zulu17-jdk && \
     apt-get clean all
 
-RUN curl -sL https://deb.nodesource.com/setup_16.x -o nodesource_setup.sh && \
-    bash nodesource_setup.sh && \
+RUN sh -c 'curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg' && \
+    sh -c 'echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list' && \
     apt-get update && \
     apt-get install -y nodejs && \
     apt-get clean all
